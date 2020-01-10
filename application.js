@@ -39,6 +39,16 @@ $(function () {
         var sample = medicineData.slice(0, 5);
         var inputTable = $("#inputtable");
         inputTable.empty().append(CreateTable(sample, variablesInTable, "The input table"));
-    }
 
+        CrossfilterInstance = crossfilter(medicineData);
+
+        var medNameDim = CrossfilterInstance.dimension(function(d) {
+            return d.MedName;
+        });
+
+        var dataFiltered= medNameDim.filter('Grazax 75 000 SQ-T')
+        var filteredTable = $('#filteredtable');
+        filteredTable.empty().append(CreateTable(dataFiltered.top(5), variablesInTable, 'OurFirst Filtered Table'));
+    }
+    
 })
