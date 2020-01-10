@@ -64,6 +64,38 @@ $(function () {
         variablesInTable = ["key","value"]
         filteredTable.empty().append(CreateTable(countPerMed.top(Infinity), variablesInTable, 'Reduced Table'));
         //
+
+        //3 функции для не стандартного вывода библиотеки Crossfilter
+
+        //Функция задает начальные значения для всех вычисляемых показателей
+        var reduceInitAvg = function(p,v){
+            return {count: 0, stockSum : 0, stockAvg:0};
+        }
+        //
+        
+        //Функция, которая описывает, что должно происходить при добавлении нового наблюдения
+        var reduceAddAvg = function(p,v){
+            p.count += 1;
+            p.stockSum = p.stockSum + Number(v.Stock);
+            p.stockAvg = Math.round(p.stockSum / p.count);
+            return p;
+        }
+        //
+
+        //Функция, которая описывает, что должно происходить при исключении наблюдения
+        var reduceRemoveAvg = function(p,v){
+            p.count -= 1;
+            p.stockSum = p.stockSum - Number(v.Stock);
+            p.stockAvg = Math.round(p.stockSum / p.count);
+            return p;
+        }
+        //
+
+        //Применем наш MapReduce к набору данных
+        dataFiltered = medNameDim.group().reduce(reduceAddAvg, reduceRemoveAvg, reduceInitAvg) 
+        variablesInTable = ["key","value.stockAvg"] 
+        filteredTable.empty().append(CreateTable(dataFiltered.top(Infinity),variablesInTable,'Reduced Table'));
+        //
     }
 
 })
