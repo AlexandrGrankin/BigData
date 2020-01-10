@@ -58,6 +58,12 @@ $(function () {
 
         filteredTable.empty().append(CreateTable(DateDim.bottom(5),variablesInTable,'Our First Filtered Table'));
         //
+
+        //Вывод обобщеной информации, количество всех записей о лекарстве
+        var countPerMed = medNameDim.group().reduceCount();
+        variablesInTable = ["key","value"]
+        filteredTable.empty().append(CreateTable(countPerMed.top(Infinity), variablesInTable, 'Reduced Table'));
+        //
     }
 
 })
