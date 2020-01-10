@@ -40,6 +40,7 @@ $(function () {
         var inputTable = $("#inputtable");
         inputTable.empty().append(CreateTable(sample, variablesInTable, "The input table"));
 
+        //Сортировка по названию лекарства, первые 5 результатов
         CrossfilterInstance = crossfilter(medicineData);
 
         var medNameDim = CrossfilterInstance.dimension(function(d) {
@@ -48,7 +49,15 @@ $(function () {
 
         var dataFiltered= medNameDim.filter('Grazax 75 000 SQ-T')
         var filteredTable = $('#filteredtable');
-        filteredTable.empty().append(CreateTable(dataFiltered.top(5), variablesInTable, 'OurFirst Filtered Table'));
+        filteredTable.empty().append(CreateTable(dataFiltered.top(5), variablesInTable, 'Our First Filtered Table'));
+        //
+
+        //Сортировка по дате, первые 5 результатов
+        var DateDim = CrossfilterInstance.dimension(
+            function(d) {return d.Day;});
+
+        filteredTable.empty().append(CreateTable(DateDim.bottom(5),variablesInTable,'Our First Filtered Table'));
+        //
     }
-    
+
 })
